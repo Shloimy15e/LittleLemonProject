@@ -13,15 +13,15 @@ from .serializers import BookingSerializer
 # Create your views here.
 
 class MenuViewSet(ModelViewSet):
-    serializer_class = MenuSerializer
-    ordering_fields = ['name', 'price']
-    ordering = ['name', 'price']
-    search_fields = ['name', 'description']
-    filter_backends = [DjangoFilterBackend, OrderingFilter, SearchFilter]
-    filterset_fields = ['name', 'price']
+      serializer_class = MenuSerializer
+      ordering_fields = ['name', 'price']
+      ordering = ['name', 'price']
+      search_fields = ['name', 'description']
+      filter_backends = [DjangoFilterBackend, OrderingFilter, SearchFilter]
+      filterset_fields = ['name', 'price']
+      def get_queryset(self):
+            return Menu.objects.all()
     
-    def get_queryset(self):
-         return Menu.objects.all()
 class BookingViewSet(ModelViewSet):
       serializer_class = BookingSerializer
       filter_backends = [DjangoFilterBackend, OrderingFilter, SearchFilter]

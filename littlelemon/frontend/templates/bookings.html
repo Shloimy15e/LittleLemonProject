@@ -9,7 +9,9 @@
     <div class="row">
       <!--Begin col-->
       <div class="column">
-        <pre id="bookings"></pre>
+        <pre id="bookings">
+          {{ bookings|safe }}
+        </pre>
       </div>
       <!--End col-->
 
