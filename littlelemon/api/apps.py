@@ -1,6 +1,6 @@
 from django.apps import AppConfig
 
 
-class MenuWebConfig(AppConfig):
+class ApiConfig(AppConfig):
     default_auto_field = 'django.db.models.BigAutoField'
-    name = 'menu_web'
+    name = 'api'
