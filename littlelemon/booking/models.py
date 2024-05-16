@@ -8,7 +8,7 @@ class Booking(models.Model):
       date = models.DateField()
       time = models.TimeField()
       number_of_people = models.IntegerField()
-      message = models.TextField()
+      message = models.TextField(null=True)
       created_at = models.DateTimeField(auto_now_add=True)
       updated_at = models.DateTimeField(auto_now=True)
       def __str__(self):
