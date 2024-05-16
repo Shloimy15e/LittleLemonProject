@@ -5,11 +5,18 @@ from rest_framework import serializers
 
 from django.core.exceptions import ValidationError
 from django.core.validators import validate_email
+from django.core.validators import EmailValidator
 
 from django.utils import timezone
 
 from menu.models import Menu
 from booking.models import Booking
+
+# Validator defs for Menu and Booking models
+def validate_no_html(value):
+      if re.search('<.*?>', value) or re.search('&.*?;|%', value):
+            raise serializers.ValidationError('Field may not contain HTML tags')
+      return value
 
 class MenuSerializer(serializers.ModelSerializer):
       class Meta:
@@ -27,21 +34,17 @@ class MenuSerializer(serializers.ModelSerializer):
                   raise serializers.ValidationError('Name must be at least 3 characters long')
             if len(value) > 100:
                   raise serializers.ValidationError('Name may not be longer than 100 characters')
-            if re.search('<.*?>', value) or re.search('&.*?;|%', value):
-                  raise serializers.ValidationError('Name may not contain HTML tags')
-            return value     
+            return validate_no_html(value)    
            
       def validate_description(self, value):
-            if re.search('<.*?>', value) or re.search('&.*?;|%', value):
-                  raise serializers.ValidationError('Description may not contain HTML tags')
-            return value
+            return validate_no_html(value)
         
         
         
 class BookingSerializer(serializers.ModelSerializer):
       class Meta:
             model = Booking
-            fields = '__all__'
+            fields = ['name', 'email', 'phone', 'date', 'time', 'number_of_people', 'message']
             
       # validators
       def validate_name(self, value):
@@ -49,9 +52,7 @@ class BookingSerializer(serializers.ModelSerializer):
                   raise serializers.ValidationError('Name must be at least 3 characters long')
             if len(value) > 100:
                   raise serializers.ValidationError('Name may not be longer than 100 characters')
-            if re.search('<.*?>', value) or re.search('&.*?;|%', value):
-                  raise serializers.ValidationError('Name may not contain HTML tags')
-            return value
+            return validate_no_html(value)
       
       def validate_email(self, value):
             try:
@@ -74,13 +75,18 @@ class BookingSerializer(serializers.ModelSerializer):
                   raise serializers.ValidationError('Date must be in the future')
             return value
       
-      def validate_time(self, value):
-            if value < timezone.now().time():
-                  raise serializers.ValidationError('Time must be in     the future')
-            return value
+      def validate(self, data):
+            date = data['date']
+            time = data['time']
+            if date == timezone.now().date() and time < timezone.now().time():
+                  raise serializers.ValidationError('Time must be in the future')
+            return data
       
       def validate_number_of_people(self, value):
             if value < 1:
                   raise serializers.ValidationError('Number of people must be greater than 0')
             return value
+      
+      def validate_message(self, value):
+            return validate_no_html(value)
       
