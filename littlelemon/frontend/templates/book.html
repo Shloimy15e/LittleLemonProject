@@ -65,7 +65,7 @@
             const date = document.getElementById('reservation_date').value
             document.getElementById('today').innerHTML = date
             
-            fetch("{% url 'bookings' %}" + '?date=' + date)
+            fetch("{% url 'api:bookings-list' %}" + '?date=' + date)
             .then(r => r.json())
             .then(data => {
                 reserved_slots = []
@@ -120,7 +120,7 @@
                 reservation_slot: document.getElementById('reservation_slot').value,
             }
 
-            fetch("{% url 'bookings' %}", { method: 'post', body: JSON.stringify(formdata) })
+            fetch("{% url 'api:bookings-list' %}", { method: 'post', body: JSON.stringify(formdata) })
             .then(r => r.text())
             .then(data => {
                 getBookings()

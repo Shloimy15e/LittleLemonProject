@@ -5,9 +5,11 @@ from .views import BookingViewSet
 
 from rest_framework.routers import DefaultRouter
 
+app_name = 'api'
+
 router = DefaultRouter()
 router.register('menu', MenuViewSet, basename='menu')
-router.register('bookings', BookingViewSet, basename='booking')
+router.register('bookings', BookingViewSet, basename='bookings')
 
 urlpatterns = [
       path('', include(router.urls))

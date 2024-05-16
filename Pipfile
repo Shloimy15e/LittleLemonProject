@@ -9,6 +9,7 @@ djangorestframework = "*"
 mysqlclient = "*"
 djoser = "*"
 phonenumbers = "*"
+django-filter = "*"
 
 [dev-packages]
 

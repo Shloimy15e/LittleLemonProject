@@ -1,5 +1,10 @@
 from django.test import TestCase
 from django.utils import timezone
+from django.urls import reverse
+
+from rest_framework.test import APITestCase
+from rest_framework import status
+
 
 from .serializers import MenuSerializer
 from .serializers import BookingSerializer
@@ -249,4 +254,123 @@ class MenuSerializerTestCase(TestCase):
             serializer = MenuSerializer(data=data)
             self.assertTrue(serializer.is_valid())
             
+# Tests to test the API views 
+class BookingViewSetTestCase(APITestCase):
+      def setUp(self):
+            self.data = {
+                  'name': 'John Doe',
+                  'email': 'email@email.com',  
+                  'phone': '+46701234567',
+                  'date': '2025-01-01',
+                  'time': '12:00:00',
+                  'number_of_people': 2,
+                  'message': 'This is a test message'
+            }
+            self.update_data = {
+                  'name': 'Jane Doe',
+                  'email': 'email@example.com',
+                  'phone': '+46701234568',
+                  'date': '2025-01-02',
+                  'time': '13:00:00',
+                  'number_of_people': 3,
+                  'message': 'This is an updated test message'
+            }
+                        
+      def test_create_booking(self):
+            url = reverse('bookings-list')
+            response = self.client.post(url, self.data)
+            self.assertEqual(response.status_code, status.HTTP_201_CREATED)
+            self.data['id'] = response.data['id']
+            self.assertEqual(response.data, self.data)
             
+      def test_list_bookings(self):
+            url = reverse('bookings-list')
+            response = self.client.get(url)
+            self.assertEqual(response.status_code, status.HTTP_200_OK)
+            
+      def test_retrieve_booking(self):
+            url = reverse('bookings-list')
+            response = self.client.post(url, self.data)
+            self.assertEqual(response.status_code, status.HTTP_201_CREATED)
+            booking_id = response.data['id']
+            url = reverse('bookings-detail', args=[booking_id])
+            response = self.client.get(url)
+            self.data['id'] = booking_id
+            self.assertEqual(response.status_code, status.HTTP_200_OK)
+            self.assertEqual(response.data, self.data)
+            
+      def test_update_booking(self):
+            url = reverse('bookings-list')
+            response = self.client.post(url, self.data)
+            self.assertEqual(response.status_code, status.HTTP_201_CREATED)
+            booking_id = response.data['id']
+            url = reverse('bookings-detail', args=[booking_id])
+            self.update_data['id'] = booking_id
+            response = self.client.put(url, self.update_data)
+            self.assertEqual(response.status_code, status.HTTP_200_OK)
+            self.assertEqual(response.data, self.update_data)
+            
+      def test_delete_booking(self):
+            url = reverse('bookings-list')
+            response = self.client.post(url, self.data)
+            self.assertEqual(response.status_code, status.HTTP_201_CREATED)
+            booking_id = response.data['id']
+            url = reverse('bookings-detail', args=[booking_id])
+            response = self.client.delete(url)
+            self.assertEqual(response.status_code, status.HTTP_204_NO_CONTENT)
+            
+class MenuViewSetTestCase(APITestCase):
+      def setUp(self):
+            self.data = {
+                  'name': 'Hamburger',
+                  'description': 'A delicious hamburger',
+                  'price': '10.00'
+            }
+            self.update_data = {
+                  'name': 'Cheeseburger',
+                  'description': 'A delicious cheeseburger',
+                  'price': '12.00'
+            }
+      def test_create_menu(self):
+            url = reverse('menu-list')
+            response = self.client.post(url, self.data)
+            self.assertEqual(response.status_code, status.HTTP_201_CREATED)
+            self.data['id'] = response.data['id']
+            self.assertEqual(response.data, self.data)
+            
+      def test_list_menus(self):
+            url = reverse('menu-list')
+            response = self.client.get(url)
+            self.assertEqual(response.status_code, status.HTTP_200_OK)
+            
+      def test_retrieve_menu(self):
+            url = reverse('menu-list')
+            response = self.client.post(url, self.data)
+            self.assertEqual(response.status_code, status.HTTP_201_CREATED)
+            menu_id = response.data['id']
+            url = reverse('menu-detail', args=[menu_id])
+            response = self.client.get(url)
+            self.data['id'] = menu_id
+            self.assertEqual(response.status_code, status.HTTP_200_OK)
+            self.assertEqual(response.data, self.data)
+      
+      def test_update_menu(self):
+            url = reverse('menu-list')
+            response = self.client.post(url, self.data)
+            self.assertEqual(response.status_code, status.HTTP_201_CREATED)
+            menu_id = response.data['id']
+            url = reverse('menu-detail', args=[menu_id])
+            self.update_data['id'] = menu_id
+            response = self.client.put(url, self.update_data)
+            self.assertEqual(response.status_code, status.HTTP_200_OK)
+            self.assertEqual(response.data, self.update_data)
+      
+      def test_delete_menu(self):
+            url = reverse('menu-list')
+            response = self.client.post(url, self.data)
+            self.assertEqual(response.status_code, status.HTTP_201_CREATED)
+            menu_id = response.data['id']
+            url = reverse('menu-detail', args=[menu_id])
+            response = self.client.delete(url)
+            self.assertEqual(response.status_code, status.HTTP_204_NO_CONTENT)
+      
