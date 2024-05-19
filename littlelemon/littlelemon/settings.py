@@ -41,10 +41,9 @@ INSTALLED_APPS = [
     'rest_framework.authtoken',
     'django_filters',
     'djoser',
-    'booking',
-    'menu',
-    'api',
-    'frontend',
+    'core',  # the core app
+    'api', # the api app
+    'frontend', # the frontend app
 ]
 
 MIDDLEWARE = [

@@ -4,8 +4,8 @@ from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework.filters import OrderingFilter
 from rest_framework.filters import SearchFilter
 
-from menu.models import Menu
-from booking.models import Booking
+from core.models import Menu
+from core.models import Booking
 
 from .serializers import MenuSerializer
 from .serializers import BookingSerializer

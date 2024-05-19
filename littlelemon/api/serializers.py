@@ -9,8 +9,8 @@ from django.core.validators import EmailValidator
 
 from django.utils import timezone
 
-from menu.models import Menu
-from booking.models import Booking
+from core.models import Menu
+from core.models import Booking
 
 # Validator defs for Menu and Booking models
 def validate_no_html(value):
