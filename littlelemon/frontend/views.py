@@ -21,7 +21,7 @@ class MenuView(TemplateView):
             try:
                   response = requests.get(settings.API_URL + 'menu/')
                   response.raise_for_status()  
-                  context['menu'] = response.json()
+                  context['menu'] = response.json()['results']
                   context['message'] = 'Menu fetched successfully'
             except requests.exceptions.RequestException as e:
                   print(f"RequestException: {e}")
