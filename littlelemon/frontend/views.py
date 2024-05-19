@@ -22,12 +22,15 @@ class MenuView(TemplateView):
                   response = requests.get(settings.API_URL + 'menu/')
                   response.raise_for_status()  
                   context['menu'] = response.json()
+                  context['message'] = 'Menu fetched successfully'
             except requests.exceptions.RequestException as e:
                   print(f"RequestException: {e}")
                   context['error'] = 'Error: ' + str(e)
+                  context ['message'] = 'Error fetching menu: ' + str(e)
             except json.JSONDecodeError as e:
                   print(f"JSONDecodeError: {e}")
                   context['error'] = 'Error: ' + str(e)
+                  context ['message'] = 'Error fetching menu: ' + str(e)
             return context
       
 class BookView(TemplateView):

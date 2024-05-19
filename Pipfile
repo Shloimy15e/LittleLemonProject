@@ -10,6 +10,7 @@ mysqlclient = "*"
 djoser = "*"
 phonenumbers = "*"
 django-filter = "*"
+mysql = "*"
 
 [dev-packages]
 
