@@ -4,16 +4,25 @@
 <h1>Menu</h1>
 <!--Begin col-->
 <div class="column">
+    {% if message %}
+    <p>{{ message }}</p>
+    {% endif %}
     {% for item in menu %}
-    <p>
+    <p id="menu">
         <a href="">
+            {% if item.image %}
+                <img src="{{ item.image }}" alt="image of {{ item.name|lower }}" class="menu-image" style="width: 30%;">
+            {% endif %}
+            <br>
             {{ item.name }}
-            </a>
+        </a>
         <span class="menu-price">
             ${{ item.price }}
         </span>
     </p>
     {% endfor %}
 </div>
+<button class="" id="load-more">Load More</button>
+<script src="{% static 'js/fetch_menu.js' %}"></script>
 <!--End col-->
 {% endblock %}

@@ -41,10 +41,9 @@ INSTALLED_APPS = [
     'rest_framework.authtoken',
     'django_filters',
     'djoser',
-    'booking',
-    'menu',
-    'api',
-    'frontend',
+    'core',  # the core app
+    'api', # the api app
+    'frontend', # the frontend app
 ]
 
 MIDDLEWARE = [
@@ -129,6 +128,10 @@ USE_TZ = True
 
 STATIC_URL = 'static/'
 
+# Configuration for media files
+MEDIA_URL = '/media/'
+MEDIA_ROOT = BASE_DIR / 'media'
+
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.0/ref/settings/#default-auto-field
 
@@ -148,8 +151,8 @@ REST_FRAMEWORK = {
         'rest_framework.authentication.SessionAuthentication',
     ],
     #'DEFAULT_PERMISSION_CLASSES': [],
-    #>>>>'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.PageNumberPagination',
-    'PAGE_SIZE': 10,
+    'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.PageNumberPagination',
+    'PAGE_SIZE': 1,
     'DEFAULT_FILTER_BACKENDS': [
         'django_filters.rest_framework.DjangoFilterBackend',
     ],

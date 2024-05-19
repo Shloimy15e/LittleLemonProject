@@ -9,8 +9,8 @@ from django.core.validators import EmailValidator
 
 from django.utils import timezone
 
-from menu.models import Menu
-from booking.models import Booking
+from core.models import Menu
+from core.models import Booking
 
 # Validator defs for Menu and Booking models
 def validate_no_html(value):
@@ -21,7 +21,7 @@ def validate_no_html(value):
 class MenuSerializer(serializers.ModelSerializer):
       class Meta:
             model = Menu
-            fields = ['id', 'name', 'price', 'description']
+            fields = ['id', 'name', 'price', 'description', 'image']
            
       # validators 
       def validate_price(self, value):
@@ -62,6 +62,9 @@ class BookingSerializer(serializers.ModelSerializer):
             return value
       
       def validate_phone(self, value):
+            if not value:
+                  return value
+            
             try:
                   phone_number = phonenumbers.parse(value)
                   if not phonenumbers.is_valid_number(phone_number):
@@ -88,5 +91,7 @@ class BookingSerializer(serializers.ModelSerializer):
             return value
       
       def validate_message(self, value):
+            if not value:
+                  return value
             return validate_no_html(value)
       

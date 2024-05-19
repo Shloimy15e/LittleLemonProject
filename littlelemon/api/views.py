@@ -4,8 +4,8 @@ from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework.filters import OrderingFilter
 from rest_framework.filters import SearchFilter
 
-from menu.models import Menu
-from booking.models import Booking
+from core.models import Menu
+from core.models import Booking
 
 from .serializers import MenuSerializer
 from .serializers import BookingSerializer
@@ -29,6 +29,8 @@ class BookingViewSet(ModelViewSet):
       ordering = ['date', 'time']
       search_fields = ['name', 'email', 'phone', 'message']
       filterset_fields = ['date', 'time', 'number_of_people']
-      
+      # Set pagination
+      pagination_class = None
+      page_size = 100
       def get_queryset(self):
             return Booking.objects.all()
