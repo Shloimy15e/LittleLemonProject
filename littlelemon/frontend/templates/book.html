@@ -34,7 +34,7 @@
 
             <!--Begin col-->
             <div class="column">
-                <h2>Bookings For <span id="today"></span></h2>
+                <h2 id="booking-heading">Enter date to see availability<span id="date"></span></h2>
                 <div id="bookings">
                 </div>
             </div>
@@ -50,7 +50,6 @@
 <script>
     document.addEventListener('DOMContentLoaded', function () {
         const date = new Date()
-        document.getElementById('reservation_date').value = `${date.getFullYear()}-${(date.getMonth() + 1).toString().padStart(2, "0")}-${date.getDate().toString().padStart(2, "0")}`
 
         console.log(document.getElementById('reservation_date').value)
         getBookings()
@@ -61,17 +60,21 @@
         })
 
         function getBookings() {
-            let reserved_slots = []
-            const date = document.getElementById('reservation_date').value
-            document.getElementById('today').innerHTML = date
+            let reserved_slots = [];
+            const date = document.getElementById('reservation_date').value;
+            document.getElementById('today').innerHTML = date;
             
-            fetch("{% url 'api:bookings-list' %}" + '?date=' + date)
-            .then(r => r.json())
+            fetch("/api/bookings/" + '?date=' + date)
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Network response was not ok: ' + response.status + ' ' + response.statusText);
+                }
+                return response.json()
+            })
             .then(data => {
                 reserved_slots = []
                 let bookings = ''
                 
-                /* Step 11: Part three */
                 // run for loop in data with item as index
                 for(let item of data){
                     console.log(item.fields.reservation_slot + ' reserved');
