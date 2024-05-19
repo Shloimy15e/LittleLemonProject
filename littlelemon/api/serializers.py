@@ -62,6 +62,9 @@ class BookingSerializer(serializers.ModelSerializer):
             return value
       
       def validate_phone(self, value):
+            if not value:
+                  return value
+            
             try:
                   phone_number = phonenumbers.parse(value)
                   if not phonenumbers.is_valid_number(phone_number):
@@ -88,5 +91,7 @@ class BookingSerializer(serializers.ModelSerializer):
             return value
       
       def validate_message(self, value):
+            if not value:
+                  return value
             return validate_no_html(value)
       
