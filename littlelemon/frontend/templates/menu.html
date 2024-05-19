@@ -4,18 +4,21 @@
 <h1>Menu</h1>
 <!--Begin col-->
 <div class="column">
+    {% if message %}
+    <p>{{ message }}</p>
+    {% endif %}
     {% for item in menu %}
-    <p>
+    <p id="menu">
         <a href="">
             {{ item.name }}
-            </a>
+        </a>
         <span class="menu-price">
             ${{ item.price }}
         </span>
     </p>
     {% endfor %}
-    <button class="" id="load-more">Load More</button>
 </div>
-
+<button class="" id="load-more">Load More</button>
+<script src="{% static 'js/fetch_menu.js' %}"></script>
 <!--End col-->
 {% endblock %}
