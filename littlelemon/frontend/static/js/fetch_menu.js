@@ -23,6 +23,16 @@ loadMore.addEventListener('click', function() {
                         const p = document.createElement('p');
                         const a = document.createElement('a');
                         const span = document.createElement('span');
+                        const img = document.createElement('img');
+                        if (item.image !== null) {
+                              // Set the info of the img element
+                              img.src = item.image;
+                              img.alt = item.name;
+                              img.className = 'menu-image';
+                              img.style.width = '30%';
+                        }
+                        p.appendChild(img);
+                        p.appendChild(document.createElement('br'));
                         // Set the text of the a element to the name of the item
                         a.textContent = item.name;
                         // Set the text of the span element to the price of the item

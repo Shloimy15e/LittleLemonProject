@@ -10,6 +10,10 @@
     {% for item in menu %}
     <p id="menu">
         <a href="">
+            {% if item.image %}
+                <img src="{{ item.image }}" alt="image of {{ item.name|lower }}" class="menu-image" style="width: 30%;">
+            {% endif %}
+            <br>
             {{ item.name }}
         </a>
         <span class="menu-price">
