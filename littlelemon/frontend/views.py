@@ -47,4 +47,4 @@ class BookingsView(TemplateView):
                   context['bookings'] = response.json()
             except requests.exceptions.RequestException as e:
                   context['error'] = 'Error: ' + str(e)
-                  return context
+            return context
