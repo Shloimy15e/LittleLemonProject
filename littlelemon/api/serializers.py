@@ -21,7 +21,7 @@ def validate_no_html(value):
 class MenuSerializer(serializers.ModelSerializer):
       class Meta:
             model = Menu
-            fields = ['id', 'name', 'price', 'description']
+            fields = ['id', 'name', 'price', 'description', 'image']
            
       # validators 
       def validate_price(self, value):

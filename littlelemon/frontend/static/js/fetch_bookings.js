@@ -3,6 +3,21 @@ const reservationDate = document.querySelector('#reservation_date');
 
 reservationDate.addEventListener('change', getBookings);
 
+// Define the format time function
+function formatTime(time) {
+      if (typeof time === 'string') {
+            // If time is a string, assume it's in the format "HH:MM:SS" and return "HH:MM"
+            return time.substr(0, 5);
+      } else if (typeof time === 'number') {
+            // If time is a number, assume it's hours and convert to "HH:MM"
+            const date = new Date(0);
+            date.setSeconds(time * 3600); // convert hours to seconds
+            return date.toISOString().substr(11, 5);
+      } else {
+            throw new Error('Invalid time format');
+      }
+} 
+
 // Define the get bookings function
 function getBookings(){
       // Get the date the user selected
@@ -37,7 +52,7 @@ function getBookings(){
                   // Set the text of the p element to the name of the booking
                   p.textContent = booking.name;
                   // Set the text of the span element to the time of the booking
-                  span.textContent = booking.time;
+                  span.textContent = formatTime(booking.time);
                   span.className = 'booking-time';
                   // Append the p element to the bookings element
                   bookings.appendChild(p);
@@ -57,11 +72,6 @@ function getBookings(){
                   }
             }      
             reservationSlot.innerHTML = slot_options;     
-            function formatTime(hours) {
-                  const date = new Date(0);
-                  date.setSeconds(hours * 3600); // convert hours to seconds
-                  return date.toISOString().substr(11, 8);
-            } 
       })
       .catch(error => {
             console.error('There has been a problem with your fetch operation:', error);
