@@ -8,7 +8,13 @@ let page = 2;
 loadMore.addEventListener('click', function() {
 
       // when the button is clicked, fetch the next page from the api
-            fetch('/api/menu?page=' + page)
+            fetch('/api/menu?page=' + page, {
+                  method: 'GET',
+                  headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': 'Bearer ' + localStorage.getItem('token')
+                  }
+            })
             .then(response => {
                   if (!response.ok) {
                         throw new Error('Network response was not ok');
