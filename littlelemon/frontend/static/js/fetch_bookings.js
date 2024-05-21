@@ -24,7 +24,11 @@ function formatTime(time) {
 } 
 
 async function fetchBookings(date) {
-      const response = await fetch('/api/bookings?date=' + date);
+      const response = await fetch('/api/bookings?date=' + date, {
+            headers: {
+                  'Authorization': 'Token ' + localStorage.getItem('token')
+            }
+      });
       if (!response.ok) {
             throw new Error('Network response error: ' + response.status + ' ' + response.statusText);
             // Display error message
@@ -36,7 +40,8 @@ async function postBooking(booking) {
       const response = await fetch('/api/bookings/', {
             method: 'POST',
             headers: {
-                  'Content-Type': 'application/json'
+                  'Content-Type': 'application/json',
+                  'Authorization': 'Token ' + localStorage.getItem('token') 
             },
             body: JSON.stringify(booking)
       });
@@ -95,8 +100,11 @@ async function getBookings(){
       catch(error) {
             console.error('There has been a problem with your fetch operation:', error);
             //display error message
-            bookingHeading.textContent += ' An error occurred while fetching bookings';
-      }
+            if (localStorage.getItem('token') === null) {
+                  bookingHeading.textContent += ' Please log in to view bookings';
+            } else {
+                  bookingHeading.textContent += ' An error occurred while fetching bookings. <br> Please contact us for assistance. <br> We apologize for the inconvenience.';
+      }     }
 }
 
 async function reserve(){
