@@ -4,7 +4,6 @@ import requests
 import json
 
 from django.views.generic import TemplateView 
-
 from django.conf import settings 
 
 # Create your views here.
@@ -47,4 +46,9 @@ class BookingsView(TemplateView):
                   context['bookings'] = response.json()
             except requests.exceptions.RequestException as e:
                   context['error'] = 'Error: ' + str(e)
-                  return context
+            return context
+      
+class LoginView(TemplateView):
+      template_name = 'login.html'
+
+      

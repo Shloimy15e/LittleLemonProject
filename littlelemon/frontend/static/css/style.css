@@ -243,6 +243,18 @@ footer p {
     font-size: 1rem;
 }
 
+.card{
+    /* make card look like a card */
+    background-color: #f6f6f6;
+    border: 1px solid #f6f6f6;
+    border-radius: 25px;
+    padding: 1rem;
+    box-shadow: 2px 2px 4px #5a5a5a;
+    max-width: 80%;
+    margin: auto;
+    margin-bottom: 20px;
+}
+
 @media (max-width: 800px) {
     section {
         flex-direction: column;   

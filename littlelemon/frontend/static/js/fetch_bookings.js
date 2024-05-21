@@ -1,44 +1,16 @@
-const date = document.querySelector('#date');
-const reservationDate = document.querySelector('#reservation_date');
-const reserveButton = document.querySelector('#reserve-button');
-const bookingHeading = document.querySelector('#booking-heading');
-const bookings = document.querySelector('#bookings');
-const reservationSlot = document.querySelector('#reservation_slot');
+const bookings = document.getElementById('bookings');
+const bookingHeading = document.getElementById('bookings-heading');
 
-reservationDate.addEventListener('change', getBookings);
-reserveButton.addEventListener('click', reserve);
+// Import the formatTime function
+import {formatTime} from './utils.js';
 
-// Define the format time function
-function formatTime(time) {
-      if (typeof time === 'string') {
-            // If time is a string, assume it's in the format "HH:MM:SS" and return "HH:MM"
-            return time.substr(0, 5);
-      } else if (typeof time === 'number') {
-            // If time is a number, assume it's hours and convert to "HH:MM"
-            const date = new Date(0);
-            date.setSeconds(time * 3600); // convert hours to seconds
-            return date.toISOString().substr(11, 5);
-      } else {
-            throw new Error('Invalid time format');
-      }
-} 
-
-async function fetchBookings(date) {
-      const response = await fetch('/api/bookings?date=' + date);
-      if (!response.ok) {
-            throw new Error('Network response error: ' + response.status + ' ' + response.statusText);
-            // Display error message
-      }
-      return response.json();
-}
-
-async function postBooking(booking) {
+// Fetch all bookings. Expected response is an array of bookings objects. Anonymous data of other users and full data of the logged in user.
+async function fetchBookings(token) {
       const response = await fetch('/api/bookings/', {
-            method: 'POST',
             headers: {
-                  'Content-Type': 'application/json'
-            },
-            body: JSON.stringify(booking)
+                  'content-type': 'application/json',
+                  'Authorization': 'Token '  + token
+            }
       });
       if (!response.ok) {
             throw new Error('Network response error: ' + response.status + ' ' + response.statusText);
@@ -46,82 +18,104 @@ async function postBooking(booking) {
       return response.json();
 }
 
+// Function to create a card for a booking
+async function createBookingsCard(){
+      // Create the elements for the card
+      const divCard = document.createElement('div');
+      const divCardBody = document.createElement('div');
+      const cardBodyH2 = document.createElement('h2');
+      const dateParagraph = document.createElement('p');
+      const timeParagraph = document.createElement('p');
+      const emailParagraph = document.createElement('p');
+      const phoneParagraph = document.createElement('p');
+      const noOfGuestsParagraph = document.createElement('p');
+      const messageParagraph = document.createElement('p');
+      // Add classes to the elements
+      const elements = [dateParagraph, timeParagraph, emailParagraph, phoneParagraph, noOfGuestsParagraph, messageParagraph];
+      elements.forEach(element => {
+            element.className = 'card-text';
+      });
+      cardBodyH2.className = 'card-title';
+      divCardBody.className = 'card-body';
+      divCard.className = 'card row';
+      // Append the elements to the card
+      bookings.appendChild(divCard);
+      divCard.appendChild(divCardBody);
+      divCardBody.appendChild(cardBodyH2);
+      divCardBody.appendChild(dateParagraph);
+      divCardBody.appendChild(timeParagraph);
+      divCardBody.appendChild(emailParagraph);
+      divCardBody.appendChild(phoneParagraph);
+      divCardBody.appendChild(noOfGuestsParagraph);
+      divCardBody.appendChild(messageParagraph);
+      return {
+            cardBodyH2,
+            dateParagraph,
+            timeParagraph,
+            emailParagraph,
+            phoneParagraph,
+            noOfGuestsParagraph,
+            messageParagraph
+      }
+}
 
-
-// Define the get bookings function
-async function getBookings(){
+// Display all bookings by the logged in user
+async function displayBookings() {
+      if (!localStorage.getItem('token')) {
+            bookingHeading.textContent = 'You need to login to view your bookings';
+            return;
+      }
+      let localToken = localStorage.getItem('token');
       try {
-            // Get the date the user selected
-            const selectedDate = reservationDate.value;
-            // Fetch the bookings for the selected date
-            let data = await fetchBookings(selectedDate);
-            // Clear the bookings elements
-            bookingHeading.textContent = 'Bookings for ' + selectedDate;
-            bookings.innerHTML = '';
-
-            timeSlots = [];
-            // If there are no bookings say no bookings
+            const data = await fetchBookings(localToken);
+            bookingHeading.textContent = 'Your Bookings';
             if (data.length === 0) {
-                  bookingHeading.textContent = 'No bookings for this date. You can be the first!';
-            }else{
-                  data.forEach(booking => {
-                        // Create a new elements for name and time
-                        const p = document.createElement('p');
-                        const span = document.createElement('span');
-                        // Set the text of the p element to the name of the booking
-                        p.textContent = booking.name;
-                        // Set the text of the span element to the time of the booking
-                        span.textContent = formatTime(booking.time);
-                        span.className = 'booking-time';
-                        // Append the p element to the bookings element
-                        bookings.appendChild(p);
-                        bookings.appendChild(span);
-                        timeSlots.push(formatTime(booking.time));
+                  bookingHeading.textContent = 'No bookings yet. Book a slot now!';
+                  console.log('No bookings yet');
+            } else {
+                  console.log('Bookings found: ' + data.length);
+                  // Check if the user is logged in
+                  if (!localStorage.getItem('user')) {
+                        throw new Error('User not found in localStorage');
+                  }
+                  // Get the user data from localStorage
+                  const user = JSON.parse(localStorage.getItem('user'));
+                  console.log('user id: ' + user.id);
+                  // Loop through the bookings
+                  data.forEach(async booking => {
+                        // Only display bookings by this user
+                        if(booking.user === user.id){
+                              try {
+                                    // Create a card for each booking
+                                    const card = await createBookingsCard();
+                                    console.log('Booking: ' + JSON.stringify(booking));
+                                    card.cardBodyH2.textContent = booking.name;
+                                    card.dateParagraph.textContent = 'Date: ' + booking.date;
+                                    card.timeParagraph.textContent = 'Time: ' + formatTime(booking.time);
+                                    card.emailParagraph.textContent = 'Email: ' + booking.email;
+                                    card.noOfGuestsParagraph.textContent = 'Number of guests: ' + booking.number_of_people;
+                                    // Check if the phone and message are provided
+                                    if (booking.phone == null) {
+                                          card.phoneParagraph.textContent = 'Phone: Not provided';
+                                    } else {
+                                          card.phoneParagraph.textContent = 'Phone: ' + booking.phone;
+                                    }
+                                          if (booking.message == null) {
+                                          card.messageParagraph.textContent = 'Message: No message';
+                                    } else {
+                                          card.messageParagraph.textContent = 'Message: ' + booking.message;                              
+                                    }
+                              } catch (error) {
+                                    console.error('Error in creating card: ' + error);
+                              }
+                        }
                   });
             }
-            // If everything is successful, then add time slots which are not booked
-            slot_options = '';
-            // Loop through the bookings returned from the API and see if the time slot is booked
-            for(let i = 9; i <  23; i += 0.5){
-                  const formattedTime = formatTime(i);
-                  if(timeSlots.includes(formattedTime)){
-                        slot_options +=  `<option value="${formattedTime}" disabled>${formattedTime}</option>`
-                  }else{
-                        slot_options += `<option value="${formattedTime}">${formattedTime}</option>`
-                  }
-            }      
-            reservationSlot.innerHTML = slot_options;     
-      }
-      catch(error) {
-            console.error('There has been a problem with your fetch operation:', error);
-            //display error message
-            bookingHeading.textContent += ' An error occurred while fetching bookings';
+      } catch (error) {
+            // Log the error
+            console.error('error in display: ' + error);
       }
 }
 
-async function reserve(){
-      try {
-            // Get the date the user selected
-            const selectedDate = reservationDate.value;
-            const selectedTime = reservationSlot.value;
-            const name = document.querySelector('#name').value;
-            const email = document.querySelector('#email').value;
-            const numberOfGuests = document.querySelector('#number_of_guests').value;
-            const booking = {
-                  name: name,
-                  email: email,
-                  date: selectedDate,
-                  time: selectedTime,
-                  number_of_people: numberOfGuests
-            }
-            // Post the booking
-            await postBooking(booking);
-            
-            getBookings();
-      }
-      catch(error) {
-            console.error('There has been a problem with your fetch operation:', error);
-            //display error message
-            bookingHeading.textContent += ' An error occurred while reserving your booking';
-      }
-}
+// Call the display bookings function
+displayBookings();

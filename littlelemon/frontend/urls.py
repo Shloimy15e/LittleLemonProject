@@ -5,6 +5,7 @@ from .views import IndexView
 from .views import AboutView
 from .views import MenuView
 from .views import BookView
+from .views import LoginView
 from .views import BookingsView
 
 urlpatterns = [
@@ -12,5 +13,6 @@ urlpatterns = [
     path('about/', AboutView.as_view(), name='about'),
     path('menu/', MenuView.as_view(), name='menu'),
     path('book/', BookView.as_view(), name='book'),
+    path('login/', LoginView.as_view(), name='login-page'),
     path('reservations/', BookingsView.as_view(), name='reservations'),
 ]

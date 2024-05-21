@@ -42,7 +42,7 @@
 
             <!--Begin col-->
             <div class="column">
-                <h2 id="booking-heading">Enter date to see availability<span id="date"></span></h2>
+                <h2 id="booking-heading" data-login-url="{% url "login-page" %}"><span id="date"></span></h2>
                 <div id="bookings">
                 </div>
             </div>
@@ -52,7 +52,7 @@
 
     </article>
 </section>
-<script src="{% static 'js/fetch_bookings.js' %}"></script>
+<script src="{% static 'js/fetch_book.js' %}" type="module"></script>
 {% endblock %}
 
 <!-- Path: C7M5L1%20Item%208/restaurant/templates/base.html -->

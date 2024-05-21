@@ -110,7 +110,6 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
-
 # Internationalization
 # https://docs.djangoproject.com/en/5.0/topics/i18n/
 
@@ -137,7 +136,6 @@ MEDIA_ROOT = BASE_DIR / 'media'
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
-
 # set api urls
 API_URL = 'http://localhost:8000/api/'  # set to localhost for now
 
@@ -148,14 +146,26 @@ FRONTEND_URL = 'http://localhost:8000/'  # set to localhost for now
 REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': [
         'rest_framework.authentication.TokenAuthentication',
-        'rest_framework.authentication.SessionAuthentication',
     ],
     #'DEFAULT_PERMISSION_CLASSES': [],
     'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.PageNumberPagination',
-    'PAGE_SIZE': 1,
+    'PAGE_SIZE': 2,
     'DEFAULT_FILTER_BACKENDS': [
         'django_filters.rest_framework.DjangoFilterBackend',
     ],
-#    'DEFAULT_RENDERER_CLASSES': [    ],
+    #'DEFAULT_RENDERER_CLASSES': [    ],
     #'DEFAULT_PARSER_CLASSES': [],
+}
+
+# set up djoser
+DJOSER = {
+    'USER_CREATE_PASSWORD_RETYPE': True,
+    #'USERNAME_CHANGED_EMAIL_CONFIRMATION': True,
+    #'PASSWORD_CHANGED_EMAIL_CONFIRMATION': True,
+    #'SEND_CONFIRMATION_EMAIL': True,
+    'SET_PASSWORD_RETYPE': True,
+    #'PASSWORD_RESET_CONFIRM_URL': 'password/reset/confirm/{uid}/{token}',
+    #'ACTIVATION_URL': 'activate/{uid}/{token}',
+    #'SEND_ACTIVATION_EMAIL': True,
+    'SERIALIZERS': {},    
 }

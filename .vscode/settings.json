@@ -11,7 +11,7 @@
                   "driver": "MySQL",
                   "name": "Little lemon",
                   "database": "littlelemon",
-                  "username": "admindjango"
+                  "username": "root"
             }
       ]
 }

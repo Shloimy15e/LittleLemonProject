@@ -1,5 +1,8 @@
 from rest_framework.viewsets import ModelViewSet
-
+from rest_framework.permissions import IsAuthenticated
+from rest_framework.permissions import IsAdminUser
+from rest_framework import status
+from rest_framework.response import Response
 from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework.filters import OrderingFilter
 from rest_framework.filters import SearchFilter
@@ -19,6 +22,13 @@ class MenuViewSet(ModelViewSet):
       search_fields = ['name', 'description']
       filter_backends = [DjangoFilterBackend, OrderingFilter, SearchFilter]
       filterset_fields = ['name', 'price']
+      
+      # Require authentication only for creating, updating, and deleting
+      def get_permissions(self):
+            if self.action in ['create', 'update', 'partial_update', 'destroy']:
+                  return [IsAdminUser()]
+            return []
+      
       def get_queryset(self):
             return Menu.objects.all()
     
@@ -32,5 +42,17 @@ class BookingViewSet(ModelViewSet):
       # Set pagination
       pagination_class = None
       page_size = 100
+      
+      permission_classes = [IsAuthenticated]
+      
       def get_queryset(self):
             return Booking.objects.all()
+      
+      def create(self, request, *args, **kwargs):
+            data = request.data.copy()
+            data['user'] = request.user.id
+            serializer = self.get_serializer(data=data)
+            serializer.is_valid(raise_exception=True)
+            self.perform_create(serializer)
+            headers = self.get_success_headers(serializer.data)
+            return Response(serializer.data, status=status.HTTP_201_CREATED, headers=headers)

@@ -44,8 +44,17 @@ class MenuSerializer(serializers.ModelSerializer):
 class BookingSerializer(serializers.ModelSerializer):
       class Meta:
             model = Booking
-            fields = ['id', 'name', 'email', 'phone', 'date', 'time', 'number_of_people', 'message']
+            fields = ['id', 'user', 'name', 'email', 'phone', 'date', 'time', 'number_of_people', 'message']
             
+      def to_representation(self, instance):
+            representation = super().to_representation(instance)
+            request = self.context.get('request')
+            if request and request.user.is_authenticated and request.user.id is not instance.user.id:
+                  representation.update({'name': None}) # hide the name
+            else:
+                  representation.update({'name': instance.name})
+            return representation
+               
       # validators
       def validate_name(self, value):
             if len(value) < 3:
