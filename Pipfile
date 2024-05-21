@@ -12,6 +12,7 @@ phonenumbers = "*"
 django-filter = "*"
 mysql = "*"
 pillow = "*"
+selenium = "*"
 
 [dev-packages]
 

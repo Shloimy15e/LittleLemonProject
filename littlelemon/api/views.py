@@ -21,6 +21,13 @@ class MenuViewSet(ModelViewSet):
       search_fields = ['name', 'description']
       filter_backends = [DjangoFilterBackend, OrderingFilter, SearchFilter]
       filterset_fields = ['name', 'price']
+      
+      # Require authentication only for creating, updating, and deleting
+      def get_permissions(self):
+            if self.action in ['create', 'update', 'partial_update', 'destroy']:
+                  return [IsAuthenticated()]
+            return []
+      
       def get_queryset(self):
             return Menu.objects.all()
     
