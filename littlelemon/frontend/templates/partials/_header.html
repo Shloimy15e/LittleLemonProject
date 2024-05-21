@@ -5,10 +5,12 @@
 <nav>
   <ul>
     <li><a href="{% url 'home' %}">Home</a></li>
-    <li><a href="{% url 'login-page' %}">Log in</a></li>
+    <li><a id="login-button" href="{% url 'login-page' %}">Login</a></li>
     <li><a href="{% url 'about' %}">About</a></li>
     <li><a href="{% url 'menu' %}">Menu</a></li>
     <li><a href="{% url 'book' %}">Book</a></li>
     <li><a href="{% url 'reservations' %}">Reservations</a></li>
+    <!-- add a button for logout -->
+    <li><a id="logout-button" data-url="{% url "logout" %}">Logout</a></li>
   </ul>
 </nav>

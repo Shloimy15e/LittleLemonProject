@@ -50,7 +50,7 @@ class BookingSerializer(serializers.ModelSerializer):
             representation = super().to_representation(instance)
             request = self.context.get('request')
             if request and request.user.is_authenticated and request.user.id is not instance.user.id:
-                  representation.update({'name': 'Reserved'}) # hide the name
+                  representation.update({'name': None}) # hide the name
             else:
                   representation.update({'name': instance.name})
             return representation
