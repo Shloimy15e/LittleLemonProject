@@ -1,5 +1,6 @@
 from rest_framework.viewsets import ModelViewSet
 from rest_framework.permissions import IsAuthenticated
+from rest_framework.permissions import IsAdminUser
 from rest_framework import status
 from rest_framework.response import Response
 from django_filters.rest_framework import DjangoFilterBackend
@@ -25,7 +26,7 @@ class MenuViewSet(ModelViewSet):
       # Require authentication only for creating, updating, and deleting
       def get_permissions(self):
             if self.action in ['create', 'update', 'partial_update', 'destroy']:
-                  return [IsAuthenticated()]
+                  return [IsAdminUser()]
             return []
       
       def get_queryset(self):
