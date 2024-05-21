@@ -1,6 +1,6 @@
-# Little Lemon Project 
+# Little Lemon Project Original
 <h2> Capstone project</h2>
-
+<h4>Please note that I did my own app but it has all required functionalities like user auth and the likes its just a little different structure.</h4>
 The app has a backend and frontend please be aware that the frontend functionality is extra and is not needed according to project requirements.
 Feel free to play around with the front end just make sure to create a user first by using the djoser api as I will show soon.
 
