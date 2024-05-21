@@ -3,7 +3,7 @@ window.onload = function() {
       const loginButton = document.getElementById('login-button');
       const logoutButton = document.getElementById('logout-button');
 
-      if (localStorage.getItem('token') === null && localStorage.getItem('user') === null) {
+      if (localStorage.getItem('token') === null || localStorage.getItem('user') === null) {
             // When user is not logged in show login button and hide logout button
             loginButton.style.display = 'block';
             logoutButton.style.display = 'none';
